@@ -14,7 +14,7 @@ Este proyecto es una aplicación Flask que utiliza un modelo de TensorFlow para 
 
 1. Clona este repositorio:
     ```sh
-    git clone <URL_DEL_REPOSITORIO>
+    git clone https://github.com/carlajl14/market-predictor.git
     cd market-predictor
     ```
 
