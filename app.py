@@ -1,22 +1,22 @@
 from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
-from data_sources import obtener_datos_activos  # Importar la función para obtener datos
+from data_sources import obtener_datos_activos, obtener_datos_multiples_activos  # Importar las funciones para obtener datos
 
 app = Flask(__name__)
 
-# Cargar el modelo del TensorFlow Model Garden ajustado
-model = tf.keras.models.load_model("best_model_90_2.keras")
+# Cargar el modelo LSTM
+model = tf.keras.models.load_model("lstm_model.h5")
 
 # Endpoint para predicciones automatizadas (basadas en un activo)
 @app.route('/predict/<activo>', methods=['GET'])
 def predict(activo):
     try:
         # Paso 1: Obtener los datos del activo automáticamente
-        datos = obtener_datos_acciones(activo)  # Recuperar datos desde Yahoo Finance
+        datos = obtener_datos_activos(activo)  # Recuperar datos desde Yahoo Finance
 
         # Paso 2: Formatear los datos para el modelo
-        inputs = np.array(datos).reshape(1, -1)  # Ajusta al formato esperado por el modelo
+        inputs = np.array(datos).reshape(1, -1, 1)  # Ajusta al formato esperado por el modelo LSTM
 
         # Paso 3: Realizar predicción usando el modelo
         prediction = model.predict(inputs)
@@ -29,6 +29,38 @@ def predict(activo):
             "recomendacion": opciones[recomendacion[0]],
             "probabilidades": prediction.tolist()
         })
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
+# Endpoint para realizar predicciones de una lista de activos
+@app.route('/predict_multiple', methods=['POST'])
+def predict_multiple():
+    try:
+        # Obtener la lista de activos desde el cuerpo de la solicitud
+        activos = request.json.get('activos', [])
+        resultados = []
+
+        # Obtener los datos de múltiples activos
+        datos_activos = obtener_datos_multiples_activos(activos)
+
+        for activo, datos in datos_activos.items():
+            if "error" in datos:
+                resultados.append({"activo": activo, "error": datos["error"]})
+            else:
+                try:
+                    inputs = np.array(datos).reshape(1, -1, 1)  # Ajusta al formato esperado por el modelo LSTM
+                    prediction = model.predict(inputs)
+                    recomendacion = np.argmax(prediction, axis=1)  # 0: Vender, 1: Mantener, 2: Comprar
+                    opciones = {0: "Vender", 1: "Mantener", 2: "Comprar"}
+                    resultados.append({
+                        "activo": activo,
+                        "recomendacion": opciones[recomendacion[0]],
+                        "probabilidades": prediction.tolist()
+                    })
+                except Exception as e:
+                    resultados.append({"activo": activo, "error": str(e)})
+
+        return jsonify(resultados)
     except Exception as e:
         return jsonify({"error": str(e)})
 
