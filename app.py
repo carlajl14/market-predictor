@@ -40,8 +40,11 @@ def predict_multiple():
         activos = request.json.get('activos', [])
         resultados = []
 
+        # Filtrar los activos para incluir solo las criptomonedas que contengan "EUR"
+        activos_filtrados = [activo for activo in activos if "EUR" in activo]
+
         # Obtener los datos de múltiples activos
-        datos_activos = obtener_datos_multiples_activos(activos)
+        datos_activos = obtener_datos_multiples_activos(activos_filtrados)
 
         for activo, datos in datos_activos.items():
             if "error" in datos:
