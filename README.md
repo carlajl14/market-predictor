@@ -28,6 +28,14 @@ Este proyecto es una aplicación Flask que utiliza un modelo de TensorFlow para 
     docker run -p 8080:8080 market-predictor
     ```
 
+## Instalación de Dependencias
+
+Después de clonar el repositorio, instala las dependencias necesarias ejecutando el siguiente comando:
+
+```sh
+pip install -r requirements.txt
+```
+
 ## Uso
 
 ### Endpoint para predicciones de un activo
@@ -108,3 +116,5 @@ Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request p
 ## Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+Proyecto creado por Carla Jiménez
