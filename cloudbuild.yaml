@@ -1,0 +1,7 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/74947002-7ac0-44f8-8250-62f2f5a2abed/market-predictor-224256957399:$SHORT_SHA', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/74947002-7ac0-44f8-8250-62f2f5a2abed/market-predictor-224256957399:$SHORT_SHA']
+images:
+  - 'gcr.io/74947002-7ac0-44f8-8250-62f2f5a2abed/market-predictor-224256957399:$SHORT_SHA'
