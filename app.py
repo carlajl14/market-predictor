@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
 from data_sources import obtener_datos_activos, obtener_datos_multiples_activos  # Importar las funciones para obtener datos
+import os
 
 app = Flask(__name__)
 
