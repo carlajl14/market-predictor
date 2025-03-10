@@ -8,6 +8,9 @@ app = Flask(__name__)
 # Cargar el modelo LSTM
 model = tf.keras.models.load_model("lstm_model.h5")
 
+# Compilar el modelo para eliminar la advertencia
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
 # Endpoint para predicciones automatizadas (basadas en un activo)
 @app.route('/predict/<activo>', methods=['GET'])
 def predict(activo):
