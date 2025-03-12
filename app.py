@@ -78,7 +78,7 @@ def predict_multiple():
 def get_stock_data(activo):
     try:
         # Usar la función de data_sources.py para obtener datos del activo
-        datos = obtener_datos_activo(activo)
+        datos = obtener_datos_activos(activo)
         return jsonify({"activo": activo, "datos": datos.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)})
